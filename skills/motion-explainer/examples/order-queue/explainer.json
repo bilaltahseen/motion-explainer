@@ -1,0 +1,96 @@
+{
+  "title": "How an order gets fulfilled",
+  "summary": "Checkout returns immediately with `202 Accepted`. The real work (charging the card, updating the order) happens asynchronously in a worker that reads from Kafka.",
+  "diagram": "diagram.kymo",
+  "nodes": {
+    "api": { "desc": "Stateless HTTP service. It validates the cart, writes the order as `pending`, and publishes an event. It **never** calls Stripe directly, so checkout stays fast even when payments are slow." },
+    "kafka": { "desc": "Topic `orders`, partitioned by `order_id`. Events for one order always land on one partition, so they're processed in order." },
+    "worker": { "desc": "Consumer group `fulfilment`. Retries with exponential backoff (1s, 4s, 16s), then parks the event on the dead-letter topic." },
+    "dlq": { "desc": "Dead-letter topic. Nothing consumes it automatically. An on-call engineer replays events once the cause is fixed." }
+  },
+  "flows": [
+    {
+      "id": "happy-path",
+      "label": "Happy path",
+      "description": "A customer clicks **Pay** and everything works.",
+      "steps": [
+        {
+          "edge": "web->api",
+          "packet": { "label": "POST /orders", "payload": { "cart_id": "c_81f2", "items": 3, "idempotency_key": "9b1e…" } },
+          "say": "The checkout page sends the cart to the Orders API. The idempotency key means a double-click can't create two orders."
+        },
+        {
+          "edge": "api->db",
+          "packet": { "label": "INSERT order", "payload": { "id": "ord_4471", "status": "pending", "total_cents": 4599 } },
+          "say": "The API stores the order as `pending`. This row is the source of truth, and the event that follows is only a notification."
+        },
+        {
+          "edge": "api->kafka",
+          "packet": { "label": "OrderCreated", "payload": { "type": "OrderCreated", "order_id": "ord_4471", "v": 1 } },
+          "say": "It publishes an `OrderCreated` event, keyed by `order_id` so every event for this order lands on the same partition."
+        },
+        {
+          "edge": "api->web",
+          "packet": { "label": "202 Accepted", "payload": { "order_id": "ord_4471", "status": "pending" } },
+          "say": "The customer gets an answer in milliseconds. The UI polls the order status from here on."
+        },
+        {
+          "edge": "kafka->worker",
+          "packet": { "label": "OrderCreated" },
+          "say": "A fulfilment worker picks the event up. Offsets are committed **only after** the work succeeds, so a crash just means the event is redelivered."
+        },
+        {
+          "edge": "worker->stripe",
+          "packet": { "label": "PaymentIntent", "payload": { "amount": 4599, "currency": "usd", "idempotency_key": "ord_4471" } },
+          "say": "The worker charges the card, using the order id as Stripe's idempotency key, so redelivery can't double-charge."
+        },
+        {
+          "edge": "stripe->worker",
+          "packet": { "label": "succeeded" },
+          "say": "Stripe confirms the payment."
+        },
+        {
+          "edge": "worker->db",
+          "packet": { "label": "UPDATE status", "payload": { "id": "ord_4471", "status": "paid" } },
+          "say": "The order flips to `paid`. The UI's next poll shows the confirmation screen."
+        }
+      ]
+    },
+    {
+      "id": "payment-fails",
+      "label": "Payment keeps failing",
+      "description": "Stripe is down, or the card is declined over and over.",
+      "steps": [
+        {
+          "edge": "kafka->worker",
+          "packet": { "label": "OrderCreated" },
+          "say": "Same start: the worker consumes the event."
+        },
+        {
+          "edge": "worker->stripe",
+          "packet": { "label": "PaymentIntent" },
+          "say": "The charge request goes out…"
+        },
+        {
+          "edge": "stripe->worker",
+          "packet": { "label": "503 / declined", "payload": { "error": "api_connection_error", "attempt": 3 } },
+          "say": "…and fails. The worker retries after 1s, 4s and 16s. Retries **block the partition**, which is why there are only three."
+        },
+        {
+          "edge": "worker->dlq",
+          "packet": { "label": "OrderCreated + error", "payload": { "order_id": "ord_4471", "attempts": 3, "last_error": "api_connection_error" } },
+          "say": "After the last attempt, the event and its error go to `orders.dlq` and the partition moves on. Other customers aren't stuck behind this order."
+        },
+        {
+          "focus": ["db"],
+          "say": "The order stays `pending` in Postgres until someone replays the dead letter. That's the state support sees when the customer asks where their order is."
+        }
+      ]
+    }
+  ],
+  "next": [
+    "To change the retry policy, edit the backoff schedule in the worker. Keep the total retry time below the consumer's `max.poll.interval.ms`, or Kafka will assume the worker is dead.",
+    "To add a step such as sending a receipt email, publish an `OrderPaid` event after the `UPDATE` instead of calling the email service from the worker.",
+    "To replay dead letters, consume `orders.dlq` with a one-off script that republishes to `orders`. It's safe because every downstream call is idempotent."
+  ]
+}

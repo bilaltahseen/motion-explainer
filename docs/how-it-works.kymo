@@ -1,0 +1,22 @@
+title: "motion-explainer"
+
+you     circle/user/blue        "You"            "how does login work?"
+agent   hex/hex-agent/green     "Coding agent"   "Claude · Codex · Cursor"
+code    box/files/orange        "Your codebase"  "reads the real path"
+kymo    box/notebook/orange     "diagram.kymo"   "components + edges"
+spec    box/checklist/orange    "explainer.json" "steps + narration"
+build   box/gear/orange         "build.mjs"      "validate · render · tag"
+render  box/internet-cloud/blue "Kymo"           "auto-layout + icons"
+player  box/zap/red             "index.html"     "animated · offline"
+
+layout { you | { agent , code } | { kymo , spec } | build | { render , player } }
+
+you    --> agent  : "asks"
+agent  --> code   : "reads"
+agent  --> kymo
+agent  --> spec
+kymo   --> build
+spec   --> build
+build  --> render
+render --> build
+build  --> player

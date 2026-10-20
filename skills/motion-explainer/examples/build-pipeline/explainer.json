@@ -1,0 +1,78 @@
+{
+  "title": "How motion-explainer builds a player",
+  "summary": "The agent writes two small files. `build.mjs` checks them, gets an SVG from Kymo, tags every node and edge so it can be animated, and pours everything into one offline `index.html`.",
+  "diagram": "diagram.kymo",
+  "root": "../..",
+  "nodes": {
+    "build": {
+      "desc": "Orchestrates the whole pipeline and caches the rendered SVG by a hash of the `.kymo` source, so rebuilding after a narration tweak never hits the network.",
+      "code": [{ "file": "scripts/build.mjs", "line": 42 }]
+    },
+    "tag": {
+      "desc": "Kymo's SVG has no ids. This matches node groups by label and edge paths by **endpoint geometry**, then patches renderer gaps (missing gradients, overlapping reverse edges).",
+      "code": [{ "file": "scripts/tag-svg.mjs", "line": 52 }]
+    },
+    "api": { "desc": "Kymo's public renderer. No auth, ~60 requests/minute, and it embeds brand icons (Postgres, Kafka, React…) as data URIs." }
+  },
+  "flows": [
+    {
+      "id": "build",
+      "label": "First build",
+      "description": "What happens the first time you run `node scripts/build.mjs explainers/<slug>`.",
+      "steps": [
+        {
+          "edge": "agent->spec",
+          "packet": { "label": "explainer.json", "payload": { "flows": [{ "id": "login", "steps": ["…"] }], "next": ["…"] } },
+          "say": "After reading the code, the agent writes `explainer.json`: the flows, one narrated step per hop, and real `file:line` references.",
+          "code": [{ "file": "references/spec-schema.md" }]
+        },
+        {
+          "edge": "agent->kymo",
+          "packet": { "label": "diagram.kymo" },
+          "say": "It also writes `diagram.kymo`: 5–12 components and the edges between them. Kymo handles layout and routing, so there are no coordinates to fiddle with.",
+          "code": [{ "file": "references/kymo-cheatsheet.md" }]
+        },
+        {
+          "edge": "build->validate",
+          "packet": { "label": "spec + model", "payload": { "nodes": 9, "edges": 10, "flows": 1 } },
+          "say": "`build.mjs` parses the diagram for ids and checks the spec against it. Unknown nodes or missing narration **stop the build**; softer issues become warnings shown in the player.",
+          "code": [{ "file": "scripts/validate.mjs", "line": 16 }, { "file": "scripts/kymo-parse.mjs", "line": 22 }]
+        },
+        {
+          "edge": "build->render",
+          "packet": { "label": ".kymo source" },
+          "say": "If the `.kymo` source changed since the last build, it's handed to the renderer. Otherwise the cached `diagram.svg` is reused.",
+          "code": [{ "file": "scripts/build.mjs", "line": 62 }]
+        },
+        {
+          "edge": "render->api",
+          "packet": { "label": "POST /kymo/svg", "payload": "title: \"motion-explainer build pipeline\"\nagent  circle/user/blue  \"Coding agent\" …\nagent --> spec : \"writes\"" },
+          "say": "The source is POSTed to Kymo's render API. If that fails or you're offline (`MOTION_EXPLAINER_OFFLINE=1`), it falls back to `npx kymostudio` locally.",
+          "code": [{ "file": "scripts/render.mjs", "line": 18 }]
+        },
+        {
+          "edge": "api->render",
+          "packet": { "label": "200 image/svg+xml" },
+          "say": "An auto-laid-out SVG comes back, with brand icons embedded. It still has no ids, so nothing can be animated yet."
+        },
+        {
+          "edge": "build->tag",
+          "packet": { "label": "raw SVG" },
+          "say": "`tag-svg.mjs` adds `data-node` and `data-edge` attributes. It snaps each path's start and end to the nearest node to work out which edge it is.",
+          "code": [{ "file": "scripts/tag-svg.mjs", "line": 95 }]
+        },
+        {
+          "edge": "tag->player",
+          "packet": { "label": "index.html" },
+          "say": "The tagged SVG and the spec are inlined into `assets/player.html`. The result is one file with no network calls, which you can open, commit or share.",
+          "code": [{ "file": "assets/player.html" }]
+        }
+      ]
+    }
+  ],
+  "next": [
+    "To change the player's look or controls, edit `assets/player.html`, then run `node scripts/check.mjs` to rebuild every example.",
+    "If Kymo changes its SVG output, start in `scripts/tag-svg.mjs`; the regexes at the top describe the markup it expects.",
+    { "text": "To add a spec field, validate it first, then render it in the panel", "file": "scripts/validate.mjs", "line": 16 }
+  ]
+}

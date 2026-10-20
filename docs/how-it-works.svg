@@ -1,0 +1,264 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -45 721 386" width="721" height="386">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#0f172a" fill-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="g-user-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="g-box-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdba74"/><stop offset="1" stop-color="#ea580c"/></linearGradient>
+    <linearGradient id="g-face-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecfccb"/><stop offset="1" stop-color="#bef264"/></linearGradient>
+    <linearGradient id="g-face-side" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#65a30d"/><stop offset="1" stop-color="#3f6212"/></linearGradient>
+    <linearGradient id="g-face-front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3e635"/><stop offset="1" stop-color="#65a30d"/></linearGradient>
+  </defs>
+  <style>
+    .sub { fill: #64748b; font-size: 10.5px; text-anchor: middle; }
+    .dot { fill: #f59e0b; stroke: #fff; stroke-width: 2.5; }
+    .pill { fill: #f59e0b; }
+    .ptext { fill: #1c1917; font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; text-anchor: middle; }
+    .lit { fill: none; stroke: #4f46e5; stroke-width: 3; stroke-dasharray: 7 6; animation: flow .6s linear infinite; }
+    .ring { fill: none; stroke: #4f46e5; stroke-width: 2.5; }
+    @keyframes flow { to { stroke-dashoffset: -13; } }
+    @media (prefers-reduced-motion: reduce) { .lit { animation: none; } }
+  </style>
+  <style>
+    text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .title { fill: #0f172a; font-size: 17px; font-weight: 700; }
+    .label { fill: #1e293b; font-size: 13px; font-weight: 600; text-anchor: middle; }
+    .elabel { fill: #64748b; font-size: 10.5px; text-anchor: middle; }
+  </style>
+  <rect class="kymo-bg" x="-2" y="-45" width="721" height="386" rx="14" fill="#f8fafc"/>
+  <rect class="kymo-bg" x="-2" y="-45" width="721" height="386" rx="14" fill="url(#grid)"/>
+  <text class="title" x="50" y="-15">motion-explainer</text>
+  <g class="edges">
+    <path id="e0" data-edge="you->agent" d="M126,136 C166,136 149,64 189,64" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <text class="elabel" data-edge-label="you->agent" x="157.5" y="94">asks</text>
+    <path id="e1" data-edge="agent->code" d="M224,136 C224,176 224,133 224,173" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <text class="elabel" data-edge-label="agent->code" x="224" y="148.5">reads</text>
+    <path id="e2" data-edge="agent->kymo" d="M259,64 C299,64 285,64 325,64" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path id="e3" data-edge="agent->spec" d="M259,64 C299,64 285,216 325,216" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path id="e4" data-edge="kymo->build" d="M395,64 C435,64 421,136 461,136" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path id="e5" data-edge="spec->build" d="M395,216 C435,216 421,136 461,136" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path id="e6" data-edge="build->render" d="M536.2,140.7 C576.2,140.7 562.2,68.7 602.2,68.7" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path id="e7" data-edge="render->build" d="M591.8,59.3 C551.8,59.3 565.8,131.3 525.8,131.3" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path id="e8" data-edge="build->player" d="M531,136 C571,136 557,216 597,216" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  </g>
+  <g class="nodes">
+    <g data-node="you" transform="translate(88,136)" filter="url(#soft)">
+  <g class="icon-shadow">
+    <circle r="38" fill="url(#g-user-blue)"/>
+    <circle cy="-9" r="10" fill="white"/>
+    <path d="M -18,20 a 18,14 0 0 1 36,0 z" fill="white"/>
+  </g>
+</g><text data-node-label="you" class="label" x="88" y="192">You</text><text class="sub" x="88" y="207">how does login work?</text>
+    <g data-node="agent" transform="translate(224,64)" filter="url(#soft)">
+  <g class="icon-shadow">
+    <polygon points="-30,-17 0,-32 30,-17 30,17 0,32 -30,17"
+             fill="#e9f5d0" stroke="#3d5d00" stroke-width="1.6"/>
+    <circle cx="0" cy="-7" r="6.5" fill="#76b900"/>
+    <circle cx="-2.5" cy="-7" r="1" fill="#e9f5d0"/>
+    <circle cx="2.5" cy="-7" r="1" fill="#e9f5d0"/>
+    <path d="M -14,18 Q -14,4 0,4 Q 14,4 14,18 Z" fill="#76b900"/>
+    <path d="M -4,6 L 0,12 L 4,6" fill="#e9f5d0" stroke="none"/>
+  </g>
+</g><text data-node-label="agent" class="label" x="224" y="114">Coding agent</text><text class="sub" x="224" y="129">Claude · Codex · Cursor</text>
+    <g data-node="code" transform="translate(224,208)" filter="url(#soft)"><g class="icon-shadow"><rect x="-35" y="-35" width="70" height="70" rx="8" fill="url(#g-box-orange)" stroke="#c2410c" stroke-width="1.5"/>
+  <g fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round">
+    <rect x="-18" y="-18" width="20" height="26" rx="2" fill="white" opacity="0.6"/>
+    <rect x="-8" y="-8" width="22" height="28" rx="2" fill="white"/>
+    <line x1="-3" y1="-1" x2="10" y2="-1" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="-3" y1="4"  x2="10" y2="4"  stroke="#d97706" stroke-width="1.2"/>
+    <line x1="-3" y1="9"  x2="6"  y2="9"  stroke="#d97706" stroke-width="1.2"/>
+  </g>
+</g></g><text data-node-label="code" class="label" x="224" y="261">Your codebase</text><text class="sub" x="224" y="276">reads the real path</text>
+    <g data-node="kymo" transform="translate(360,64)" filter="url(#soft)"><g class="icon-shadow" transform="translate(-40,-40)"><polygon points="40,4.8 75.2,22.4 40,39.2 4.8,22.4" fill="url(#g-face-top)" stroke="#3d5d00" stroke-width="1"/><polygon points="40,39.2 75.2,22.4 75.2,57.6 40,75.2" fill="url(#g-face-side)" stroke="#3d5d00" stroke-width="1"/><polygon points="4.8,22.4 40,39.2 40,75.2 4.8,57.6" fill="url(#g-face-front)" stroke="#3d5d00" stroke-width="1"/><g transform="matrix(35.2,16.8,0,35.2,4.8,22.4)" stroke-linejoin="round">
+  <g stroke="white" stroke-width="0.045" stroke-linecap="round" fill="none">
+    <line x1="0.18" y1="0.32" x2="0.82" y2="0.32"/>
+    <line x1="0.18" y1="0.52" x2="0.82" y2="0.52"/>
+    <line x1="0.18" y1="0.72" x2="0.60" y2="0.72"/>
+  </g>
+</g></g></g><text data-node-label="kymo" class="label" x="360" y="117">diagram.kymo</text><text class="sub" x="360" y="132">components + edges</text>
+    <g data-node="spec" transform="translate(360,216)" filter="url(#soft)"><g class="icon-shadow"><rect x="-35" y="-35" width="70" height="70" rx="8" fill="url(#g-box-orange)" stroke="#c2410c" stroke-width="1.5"/>
+  <g stroke="#94a3b8" fill="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="-22" y="-22" width="44" height="44" rx="2" fill="white"/>
+    <polyline points="-15,-14 -12,-11 -8,-16" fill="none" stroke="#475569" stroke-width="2"/>
+    <line x1="-4" y1="-13" x2="14" y2="-13" stroke="#94a3b8"/>
+    <polyline points="-15,-2 -12,1 -8,-4" fill="none" stroke="#475569" stroke-width="2"/>
+    <line x1="-4" y1="-1" x2="14" y2="-1" stroke="#94a3b8"/>
+    <polyline points="-15,10 -12,13 -8,8" fill="none" stroke="#475569" stroke-width="2"/>
+    <line x1="-4" y1="11" x2="14" y2="11" stroke="#94a3b8"/>
+  </g>
+</g></g><text data-node-label="spec" class="label" x="360" y="269">explainer.json</text><text class="sub" x="360" y="284">steps + narration</text>
+    <g data-node="build" transform="translate(496,136)" filter="url(#soft)"><g class="icon-shadow"><rect x="-35" y="-35" width="70" height="70" rx="8" fill="url(#g-box-orange)" stroke="#c2410c" stroke-width="1.5"/>
+  <g fill="white" stroke="white" stroke-width="1.4" stroke-linejoin="round">
+    <path d="M 0,-15 L 4,-15 L 5,-11 L 9,-9 L 12,-12 L 15,-9 L 12,-6 L 14,-2 L 18,-1 L 18,3
+             L 14,4 L 12,8 L 15,11 L 12,14 L 9,11 L 5,13 L 4,17 L 0,17 L -1,13 L -5,11
+             L -8,14 L -11,11 L -8,8 L -10,4 L -14,3 L -14,-1 L -10,-2 L -8,-6 L -11,-9
+             L -8,-12 L -5,-9 L -1,-11 L 0,-15 Z"
+          transform="translate(2, -2) scale(0.85)"/>
+    <circle cx="2" cy="-2" r="4" fill="#f59e0b" stroke="#f59e0b"/>
+  </g>
+</g></g><text data-node-label="build" class="label" x="496" y="189">build.mjs</text><text class="sub" x="496" y="204">validate · render · tag</text>
+    <g data-node="render" transform="translate(632,64)" filter="url(#soft)">
+  <g class="icon-shadow">
+    <path d="M -22,8 a 14,14 0 1 1 6,-26 a 18,18 0 0 1 26,16 a 11,11 0 0 1 -3,21 H -22 a 11,11 0 0 1 -7,-11 z"
+          fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6" stroke-linejoin="round"/>
+    <text x="0" y="6" text-anchor="middle"
+          style="font-size:9.5px;font-weight:700;fill:#1d4ed8;letter-spacing:0.05em">WWW</text>
+  </g>
+</g><text data-node-label="render" class="label" x="632" y="117">Kymo</text><text class="sub" x="632" y="132">auto-layout + icons</text>
+    <g data-node="player" transform="translate(632,216)" filter="url(#soft)"><g class="icon-shadow"><rect x="-35" y="-35" width="70" height="70" rx="8" fill="url(#g-box-orange)" stroke="#c2410c" stroke-width="1.5"/>
+  <polygon points="2,-18 -12,4 -1,4 -3,18 11,-4 0,-4 2,-18" fill="white" stroke="white" stroke-width="1.2" stroke-linejoin="round"/>
+</g></g><text data-node-label="player" class="label" x="632" y="269">index.html</text><text class="sub" x="632" y="284">animated · offline</text>
+  </g>
+
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0;0.0871;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0;0.0779;1"><mpath href="#e0"/></animateMotion>
+    <rect x="-73" y="-29" width="146" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">how does login work?</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M126,136 C166,136 149,64 189,64" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0;0.0871;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="224" cy="64" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.0779;0.1375;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0;0.0779;0.1375;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.0916;0.1787;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.0916;0.1695;1"><mpath href="#e1"/></animateMotion>
+    <rect x="-20.2" y="-29" width="40.4" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">read</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M224,136 C224,176 224,133 224,173" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.0916;0.1787;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="224" cy="208" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.1695;0.2291;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.0916;0.1695;0.2291;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.1833;0.2703;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.1833;0.2612;1"><mpath href="#e2"/></animateMotion>
+    <rect x="-23.5" y="-29" width="47" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">.kymo</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M259,64 C299,64 285,64 325,64" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.1833;0.2703;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="360" cy="64" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.2612;0.3207;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.1833;0.2612;0.3207;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.2749;0.362;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.2749;0.3528;1"><mpath href="#e3"/></animateMotion>
+    <rect x="-23.5" y="-29" width="47" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">.json</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M259,64 C299,64 285,216 325,216" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.2749;0.362;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="360" cy="216" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.3528;0.4124;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.2749;0.3528;0.4124;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.3665;0.4536;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.3665;0.4444;1"><mpath href="#e4"/></animateMotion>
+    
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M395,64 C435,64 421,136 461,136" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.3665;0.4536;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="496" cy="136" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.4444;0.504;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.3665;0.4444;0.504;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.4582;0.5452;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.4582;0.5361;1"><mpath href="#e5"/></animateMotion>
+    
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M395,216 C435,216 421,136 461,136" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.4582;0.5452;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="496" cy="136" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.5361;0.5956;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.4582;0.5361;0.5956;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.5498;0.6369;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.5498;0.6277;1"><mpath href="#e6"/></animateMotion>
+    <rect x="-20.2" y="-29" width="40.4" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">POST</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M536.2,140.7 C576.2,140.7 562.2,68.7 602.2,68.7" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.5498;0.6369;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="632" cy="64" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.6277;0.6873;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.5498;0.6277;0.6873;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.6414;0.7285;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.6414;0.7193;1"><mpath href="#e7"/></animateMotion>
+    <rect x="-16.9" y="-29" width="33.8" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">SVG</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M591.8,59.3 C551.8,59.3 565.8,131.3 525.8,131.3" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.6414;0.7285;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="496" cy="136" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.7193;0.7789;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.6414;0.7193;0.7789;1" values="0;0;.9;0;0"/>
+  </circle>
+  <g opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.7331;0.8201;1" values="0;1;0;0"/>
+    <animateMotion dur="12.55s" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="0;0;1;1" keyTimes="0;0.7331;0.811;1"><mpath href="#e8"/></animateMotion>
+    <rect x="-40" y="-29" width="80" height="18" rx="7" class="pill"/><text class="ptext" y="-16.5">index.html</text>
+    <circle r="6.5" class="dot"/>
+  </g>
+  <path d="M531,136 C571,136 557,216 597,216" class="lit" opacity="0">
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" calcMode="discrete"
+             keyTimes="0;0.7331;0.8201;1" values="0;1;0;0"/>
+  </path>
+  <circle cx="632" cy="216" r="30" class="ring" opacity="0">
+    <animate attributeName="r" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.811;0.8705;1" values="30;30;58;58"/>
+    <animate attributeName="opacity" dur="12.55s" repeatCount="indefinite" keyTimes="0;0.7331;0.811;0.8705;1" values="0;0;.9;0;0"/>
+  </circle>
+</svg>

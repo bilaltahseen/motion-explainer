@@ -1,0 +1,20 @@
+title: "OAuth 2.0 login with PKCE"
+
+user     circle/user/blue              "You"            "browser"
+spa      box/programming-react/blue    "Web app"        "SPA"
+idp      box/saas-auth0/orange         "Auth0"          "identity provider"
+bff      box/programming-go/green      "Auth gateway"   "BFF · Go"
+sessions box/onprem-redis/red          "Sessions"       "Redis"
+api      box/programming-python/blue   "Products API"   "FastAPI"
+
+layout { user | spa | { idp , bff } | { sessions , api } }
+
+user     --> spa
+spa      --> idp      : "/authorize"
+idp      --> spa
+spa      --> bff
+bff      --> idp
+idp      --> bff
+bff      --> sessions : "SET sid"
+bff      --> spa
+bff      --> api      : "Bearer"

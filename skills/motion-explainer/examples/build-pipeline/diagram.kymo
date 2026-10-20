@@ -1,0 +1,24 @@
+title: "motion-explainer build pipeline"
+
+agent    circle/user/blue        "Coding agent"     "Claude · Codex · Gemini"
+spec     box/notebook/orange     "explainer.json"   "flows + narration"
+kymo     box/files/orange        "diagram.kymo"     "nodes + edges"
+build    hex/hex-agent/green     "build.mjs"        "orchestrator"
+validate box/checklist/green     "validate.mjs"     "spec lint"
+render   box/send/blue           "render.mjs"       "SVG renderer"
+api      box/internet-cloud/blue "Kymo render API"  "render.kymo.studio"
+tag      box/gear/orange         "tag-svg.mjs"      "adds data-node/edge"
+player   box/zap/red             "index.html"       "self-contained player"
+
+layout { agent | { spec , kymo } | build | { validate , render , tag } | { api , player } }
+
+agent    --> spec     : "writes"
+agent    --> kymo     : "writes"
+spec     --> build
+kymo     --> build
+build    --> validate : "spec + model"
+build    --> render   : ".kymo source"
+render   --> api
+api      --> render
+build    --> tag      : "raw SVG"
+tag      --> player   : "tagged SVG"

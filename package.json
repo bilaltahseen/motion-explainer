@@ -1,0 +1,12 @@
+{
+  "name": "motion-explainer",
+  "private": true,
+  "type": "module",
+  "description": "Agent Skill: animated, step-through explainers of how code and systems work.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "check:render": "node scripts/check.mjs --render",
+    "install-skill": "node skills/motion-explainer/scripts/install.mjs"
+  }
+}

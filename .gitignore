@@ -1,0 +1,4 @@
+node_modules/
+.DS_Store
+# Generated players are rebuildable; examples keep diagram.svg + .render-cache.json as offline fixtures.
+skills/motion-explainer/examples/*/index.html

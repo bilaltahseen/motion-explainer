@@ -1,0 +1,21 @@
+title: "Order processing"
+
+web     box/programming-react/blue        "Checkout UI"       "React"
+api     box/programming-javascript/green  "Orders API"        "Node.js"
+db      cylinder/onprem-postgresql/blue   "orders"            "Postgres"
+kafka   box/onprem-kafka/orange           "orders topic"      "Kafka"
+worker  box/programming-python/blue       "Fulfilment worker" "Python"
+stripe  box/saas-stripe/blue              "Stripe"            "payments"
+dlq     box/onprem-kafka/red              "orders.dlq"        "dead letters"
+
+layout { web | api | { db , kafka } | worker | { stripe , dlq } }
+
+web    --> api    : "POST /orders"
+api    --> web    : "202"
+api    --> db     : "INSERT"
+api    --> kafka  : "OrderCreated"
+kafka  --> worker : "consume"
+worker --> stripe : "charge"
+stripe --> worker
+worker --> db     : "UPDATE"
+worker --> dlq

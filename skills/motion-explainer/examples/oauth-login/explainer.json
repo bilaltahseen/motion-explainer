@@ -1,0 +1,88 @@
+{
+  "title": "How login works (OAuth 2.0 + PKCE)",
+  "summary": "The browser never holds a token. It runs the OAuth redirect dance with Auth0, then hands the one-time code to a small **auth gateway**. The gateway swaps the code for tokens, keeps them in Redis, and gives the browser an opaque session cookie.",
+  "diagram": "diagram.kymo",
+  "nodes": {
+    "bff": { "desc": "Backend-for-frontend. It's the only component that sees access and refresh tokens, and it attaches them to API calls on the browser's behalf." },
+    "sessions": { "desc": "Maps `sid` to `{ access_token, refresh_token, expires_at }`. The TTL matches the refresh token lifetime." },
+    "idp": { "desc": "Auth0 tenant. It hosts the login page, MFA and social logins. The app never sees a password." }
+  },
+  "flows": [
+    {
+      "id": "login",
+      "label": "Log in",
+      "steps": [
+        {
+          "edge": "user->spa",
+          "say": "You click **Log in**. The web app creates a random `code_verifier` and keeps it in memory. Only its SHA-256 hash leaves the browser."
+        },
+        {
+          "edge": "spa->idp",
+          "packet": { "label": "302 /authorize", "payload": { "response_type": "code", "client_id": "web", "code_challenge": "E9Melhoa…", "code_challenge_method": "S256", "state": "x1f…" } },
+          "say": "The browser is redirected to Auth0 with the hashed challenge and a `state` value for CSRF protection."
+        },
+        {
+          "focus": ["idp"],
+          "say": "You sign in on Auth0's page, with password, passkey or Google, plus MFA if it's enabled. The web app is not involved at this point."
+        },
+        {
+          "edge": "idp->spa",
+          "packet": { "label": "?code=…&state=…" },
+          "say": "Auth0 redirects back with a short-lived, single-use **authorization code**. On its own the code is useless: whoever redeems it must also present the original verifier."
+        },
+        {
+          "edge": "spa->bff",
+          "packet": { "label": "POST /auth/callback", "payload": { "code": "SplxlOBeZQ…", "code_verifier": "dBjftJeZ4C…" } },
+          "say": "The web app sends the code and the verifier to the auth gateway."
+        },
+        {
+          "edge": "bff->idp",
+          "packet": { "label": "POST /oauth/token", "payload": { "grant_type": "authorization_code", "code": "SplxlOBeZQ…", "code_verifier": "dBjftJeZ4C…", "client_secret": "••••" } },
+          "say": "The gateway redeems the code. Auth0 hashes the verifier and checks it against the challenge from step 2, so a stolen code can't be redeemed by anyone else."
+        },
+        {
+          "edge": "idp->bff",
+          "packet": { "label": "tokens", "payload": { "access_token": "eyJhbGci…", "refresh_token": "v1.MRr…", "expires_in": 900 } },
+          "say": "Auth0 returns a 15-minute access token and a refresh token."
+        },
+        {
+          "edge": "bff->sessions",
+          "packet": { "label": "SET sid:7c2e…", "payload": { "ttl_days": 30 } },
+          "say": "The gateway stores both tokens in Redis under a random session id."
+        },
+        {
+          "edge": "bff->spa",
+          "packet": { "label": "Set-Cookie: sid", "payload": "Set-Cookie: sid=7c2e…; HttpOnly; Secure; SameSite=Lax" },
+          "say": "The browser only receives an `HttpOnly` cookie. JavaScript can't read it, so an XSS bug can't leak a token."
+        }
+      ]
+    },
+    {
+      "id": "api-call",
+      "label": "Call the API",
+      "description": "What happens on every request after login, including the silent refresh.",
+      "steps": [
+        {
+          "edge": "spa->bff",
+          "packet": { "label": "GET /api/products", "payload": "Cookie: sid=7c2e…" },
+          "say": "The web app calls its own origin. The cookie is sent automatically."
+        },
+        {
+          "edge": "bff->sessions",
+          "packet": { "label": "GET sid:7c2e…" },
+          "say": "The gateway looks up the session. If the access token expires within 60 seconds, it refreshes it first by sending the refresh token to Auth0."
+        },
+        {
+          "edge": "bff->api",
+          "packet": { "label": "Authorization: Bearer", "payload": { "Authorization": "Bearer eyJhbGci…" } },
+          "say": "The gateway forwards the request with the access token. The Products API only validates JWTs and knows nothing about cookies or sessions."
+        }
+      ]
+    }
+  ],
+  "next": [
+    "To add a new protected API, route it through the gateway. Services behind it only need to verify the JWT signature and the `aud` claim.",
+    "To log a user out everywhere, delete their `sid:*` keys in Redis and revoke the refresh token in Auth0.",
+    "To debug a login loop, check that the `state` and the cookie `SameSite` setting survive the redirect back from Auth0."
+  ]
+}
